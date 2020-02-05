@@ -1,0 +1,133 @@
+# -*- coding: utf-8 -*-
+Example 07　應用問題:質、因數
+--------------------------------------------------------------------------------
+7-1 因數問題:
+(1) Input :使用者自由輸入一正整數
+    Output:顯示(1)該數共有若干因數，包含哪些數、(2)該數是否為質數
+--------------------------------------------------------------------------------
+
+number=int(input("請輸入一正整數:"))
+factorlist=[]
+#因數之上下界必為1與自己
+for factor in range(1,number+1):
+    if number%factor==0:
+        factorlist.append(factor)
+print("%d共有%d個因數，包含:"%(number,len(factorlist)),factorlist)
+
+if len(factorlist)==2:
+    print("%d為質數"%(number))
+else:
+    print("%d不是質數"%(number))
+
+--------------------------------------------------------------------------------
+(2) Input :已知完全數之定義為所有因數總和(不含自身)等同自己者，使用者自由輸入位數
+    Output:輸出(1)所有該位數之因數分解結果、(2)所有符合條件之N位完全數
+--------------------------------------------------------------------------------
+
+digit=int(input("請輸入檢驗位數:"))
+#創建列表收集同一位數符合之所有數字
+perfect_number=[]
+for number in range(10**(digit-1),10**digit):
+    factorlist=[]
+    sum=0
+
+    #完全數不採計自己，上界保持為number
+    for factor in range(1,number):
+        if number%factor==0:
+            factorlist.append(factor)
+    for item in factorlist:
+         sum+=item
+    #加總完再比較即可，寫於迴圈外
+    if sum==number:
+        perfect_number.append(number)
+    #輸出所有分解結果
+    print(number,factorlist)
+
+ print("%d位數之完全數共有%d個，包含:"%(digit,len(perfect_number)),perfect_number)
+
+--------------------------------------------------------------------------------
+7-2 質數問題:
+(1) Input :使用者自由輸入一正整數
+    Output:判斷該數是否為質數，輸出結果
+--------------------------------------------------------------------------------
+
+number=int(input("請輸入一正整數(n>1):"))
+factorlist=[]
+if number>1:
+    #避開必為因數之1與自身
+    for factor in range(2,number):
+        if number%factor==0:
+            factorlist.append(factor)
+    if len(factorlist)==0:
+        print("%d為質數"%(number))
+    else:
+        print("%d不是質數"%(number))
+else:
+    print("輸入有誤")
+
+--------------------------------------------------------------------------------
+(2) Input :使用者自由輸入數字範圍(上下界)
+    Output:輸出(1)該範圍內共有若干質數、(2)其中最大、最小者為何
+--------------------------------------------------------------------------------
+
+lower=int(input("請輸入取值範圍下界:"))
+upper=int(input("請輸入取值範圍上界:"))
+#創建列表收集數字範圍符合之所有質數
+prime_number=[]
+
+for number in range(lower,upper+1):
+    factorlist=[]
+    for factor in range(2,number):
+        if number%factor==0:
+            factorlist.append(factor)
+    if len(factorlist)==0:
+        prime_number.append(number)
+
+print("在%d~%d範圍之內，共有%d個質數"%(lower,upper,len(prime_number)))
+#依序填入列表，故首、末項分別為最小及最大值
+print("其中最小者為%d，最大者為%d"%(prime_number[0],prime_number[-1]))
+
+--------------------------------------------------------------------------------
+7-3 質因數問題:
+Input :使用者自由輸入一大於1之正整數
+Output:輸出(1)該數之所有質因數、(2)該數之質因數分解結果(90=2x3x3x5)
+--------------------------------------------------------------------------------
+
+integer=int(input("請輸入一正整數(n>1):"))
+#做質因數分解用
+division=integer
+#創建列表收集小於該整數之所有質數
+prime_number=[]
+
+#質數無法做質因數分解，故避開1與自身
+for number in range(2,integer):
+    factorlist=[]
+    for factor in range(2,number):
+        if number%factor==0:
+            factorlist.append(factor)
+    if len(factorlist)==0:
+        prime_number.append(number)
+
+prime_factorlist1=[]
+#不列出重複值:寫入for迴圈
+for item in prime_number:
+    if integer%item==0:
+        prime_factorlist1.append(item)
+print("%d之質因數包含:"%(integer),prime_factorlist1)
+
+
+i=0
+prime_factorlist2=[]
+#質因數分解可連除:不寫for迴圈，依條件決定
+while i<len(prime_number):
+    if division%prime_number[i]==0:
+        prime_factorlist2.append(prime_number[i])
+        division/=prime_number[i]
+    else:
+        #無法整除才往下檢驗，否則持續相除
+        i+=1
+
+#輸出"x"連接格式，需將列表項轉為字串
+for j in range(len(prime_factorlist2)):
+    prime_factorlist2[j]=str(prime_factorlist2[j])
+print("%d="%(integer)+"x".join(prime_factorlist2))
